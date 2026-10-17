@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+    <title>Morpheus Tracker — demo</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: #111;
+            color: #eee;
+            font: 13px/1.5 ui-monospace, SFMono-Regular, Menlo, monospace;
+            overflow: hidden;
+        }
+        #view { position: fixed; inset: 0; width: 100%; height: 100%; }
+        #hud {
+            position: fixed; top: 0; left: 0; right: 0;
+            padding: 10px 12px;
+            background: linear-gradient(#000c, #0000);
+            display: flex; gap: 16px; flex-wrap: wrap;
+            pointer-events: none;
+        }
+        #hud b { color: #9f9; font-weight: 600; }
+        #hud .lost { color: #f99; }
+        #panel {
+            position: fixed; bottom: 0; left: 0; right: 0;
+            padding: 12px;
+            background: #000a;
+            display: flex; gap: 10px; align-items: center; flex-wrap: wrap;
+        }
+        button, select {
+            background: #222; color: #eee; border: 1px solid #444;
+            padding: 7px 12px; border-radius: 6px; font: inherit; cursor: pointer;
+        }
+        button:hover { background: #2c2c2c; }
+        #target { max-height: 56px; border: 1px solid #444; border-radius: 4px; }
+        #openTarget { color: #9cf; text-decoration: none; border-bottom: 1px dotted #9cf; }
+        #openTarget:hover { color: #cef; }
+        #error {
+            position: fixed; inset: 0; display: none; place-content: center;
+            padding: 32px; background: #111; text-align: center; line-height: 1.7;
+        }
+        #error code { color: #9cf; }
+    </style>
+</head>
+<body>
+<canvas id="view"></canvas>
+
+<div id="hud">
+    <span>status: <b id="status">starting…</b></span>
+    <span>fps: <b id="fps">—</b></span>
+    <span>threads: <b id="threads">—</b></span>
+</div>
+
+<div id="panel">
+    <button id="pick">Use another image</button>
+    <input type="file" id="file" accept="image/*" hidden/>
+    <img id="target" alt="current target"/>
+    <a id="openTarget" href="/default-target.jpg" target="_blank">open target</a>
+    <select id="fpsSel">
+        <option value="30">30 fps camera</option>
+        <option value="60" selected>60 fps camera</option>
+    </select>
+    <select id="threadSel">
+        <option value="1">1 thread</option>
+        <option value="2" selected>2 threads</option>
+        <option value="3">3 threads</option>
+        <option value="4">4 threads</option>
+        <option value="8">8 threads</option>
+    </select>
+</div>
+
+<div id="error"></div>
+
+<script type="module" src="./main.ts"></script>
+</body>
+</html>

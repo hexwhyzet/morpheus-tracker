@@ -1,0 +1,8 @@
+include(emscripten-base)
+
+[settings]
+build_type=Debug
+
+[conf]
+tools.build:cflags=["-msimd128", "-g"]
+tools.build:cxxflags=["-msimd128", "-g"]

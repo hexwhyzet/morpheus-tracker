@@ -1,0 +1,215 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 980 684" width="980" height="684" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace">
+  <style>
+    :root { color-scheme: light dark; }
+    .bg      { fill: #fbfbfc; }
+    .card    { fill: #ffffff; stroke: #c9ccd4; }
+    .band    { fill: #f1f2f5; stroke: #b7bbc5; }
+    .slot    { fill: #ffffff; stroke: #b7bbc5; }
+    .rule    { stroke: #d8dbe2; }
+    .flow    { stroke: #8d93a1; fill: none; }
+    .arrow   { fill: #8d93a1; }
+    .title   { fill: #16161a; font-family: -apple-system, BlinkMacSystemFont,
+               "Segoe UI", Inter, Helvetica, Arial, sans-serif;
+               font-weight: 600; letter-spacing: -0.2px; }
+    .subtitle { fill: #71768a; }
+    .titlerule { stroke: #e2e4ea; }
+    .lane    { fill: #8d93a1; letter-spacing: 1.4px; }
+    .label   { fill: #16161a; }
+    .sub     { fill: #71768a; }
+    .state   { fill: #71768a; }
+    .pool-on  { fill: #2f9e63; stroke: #2f9e63; }
+    .pool-off { fill: none; stroke: #b7bbc5; }
+    .quad    { stroke: #2f9e63; fill: none; }
+    .canvasimg { fill: #e7e9ee; stroke: #c9ccd4; }
+    .column  { fill: #f4f5f8; stroke: #e2e4ea; }
+    .slotpart rect { fill: #ffffff; stroke: #dcdfe6; }
+    .hot     { stroke: #2f9e63; }
+    .hot-t   { fill: #2f9e63; }
+    .cold    { stroke: #c98a2e; }
+    .cold-t  { fill: #c98a2e; }
+    .flow-hot  { stroke: #2f9e63; fill: none; }
+    .flow-cold { stroke: #c98a2e; fill: none; }
+    .arrow-hot  { fill: #2f9e63; }
+    .arrow-cold { fill: #c98a2e; }
+
+    @media (prefers-color-scheme: dark) {
+      .bg    { fill: #16161a; }
+      .card  { fill: #1e1f25; stroke: #3a3c46; }
+      .band  { fill: #202229; stroke: #41444f; }
+      .slot  { fill: #191a1f; stroke: #41444f; }
+      .rule  { stroke: #2e3038; }
+      .flow  { stroke: #6f7484; }
+      .arrow { fill: #6f7484; }
+      .title { fill: #f2f3f5; }
+      .subtitle { fill: #9197a8; }
+      .titlerule { stroke: #26272e; }
+      .lane  { fill: #6f7484; }
+      .label { fill: #e8e9ec; }
+      .sub   { fill: #9197a8; }
+      .state { fill: #9197a8; }
+      .pool-on  { fill: #3fbd79; stroke: #3fbd79; }
+      .pool-off { fill: none; stroke: #41444f; }
+      .quad  { stroke: #3fbd79; }
+      .canvasimg { fill: #2a2c33; stroke: #41444f; }
+      .column { fill: #1a1b20; stroke: #26272e; }
+      .slotpart rect { fill: #191a1f; stroke: #343742; }
+      .hot    { stroke: #3fbd79; }
+      .hot-t  { fill: #3fbd79; }
+      .cold   { stroke: #e0a94a; }
+      .cold-t { fill: #e0a94a; }
+      .flow-hot  { stroke: #3fbd79; }
+      .flow-cold { stroke: #e0a94a; }
+      .arrow-hot  { fill: #3fbd79; }
+      .arrow-cold { fill: #e0a94a; }
+    }
+  </style>
+
+  <defs>
+    <marker id="a" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M0 0 L8 4 L0 8 z" class="arrow"/>
+    </marker>
+    <marker id="ah" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M0 0 L8 4 L0 8 z" class="arrow-hot"/>
+    </marker>
+    <marker id="ac" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M0 0 L8 4 L0 8 z" class="arrow-cold"/>
+    </marker>
+  </defs>
+
+  <rect class="bg" width="980" height="684"/>
+
+  <!-- Sans for the title so it reads as a name, not as one more code label -->
+  <text class="title" x="40" y="46" font-size="27">Architecture</text>
+  <text class="subtitle" x="40" y="68" font-size="13">Image tracking off the main thread</text>
+  <line class="titlerule" x1="40" y1="86" x2="940" y2="86"/>
+
+  <!-- lane panels: the three execution contexts -->
+  <!-- The main thread column runs the full height: it writes the frame and
+       draws the result. The shared-memory band is painted over the columns,
+       crossing all three execution contexts. -->
+  <rect class="column" x="24"  y="100" width="256" height="560" rx="10"/>
+  <rect class="column" x="340" y="100" width="256" height="436" rx="10"/>
+  <rect class="column" x="656" y="100" width="300" height="436" rx="10"/>
+
+  <!-- lane headers -->
+  <text class="lane" x="40"  y="128" font-size="11">MAIN THREAD</text>
+  <text class="lane" x="356" y="128" font-size="11">TRACKER.WORKER</text>
+  <text class="lane" x="672" y="128" font-size="11">WASM.WORKER</text>
+
+  <!-- ── lane 1 ───────────────────────────────────────────── -->
+  <rect class="card" x="40" y="152" width="212" height="52" rx="7"/>
+  <text class="label" x="146" y="183" font-size="13" text-anchor="middle">camera frame</text>
+
+  <path class="flow" d="M146 204 L146 232" marker-end="url(#a)"/>
+
+  <rect class="card" x="40" y="238" width="212" height="62" rx="7"/>
+  <text class="label" x="146" y="264" font-size="13" text-anchor="middle">GPU grayscale</text>
+  <text class="sub"   x="146" y="284" font-size="11" text-anchor="middle">WebGL</text>
+
+  <path class="flow" d="M146 300 L146 354" marker-end="url(#a)"/>
+
+  <!-- ── lane 2 ───────────────────────────────────────────── -->
+  <rect class="card" x="356" y="152" width="224" height="154" rx="7"/>
+  <text class="label" x="468" y="176" font-size="13" text-anchor="middle">coordinator</text>
+  <text class="sub"   x="468" y="194" font-size="10" text-anchor="middle">Atomics.wait — blocks, not on main</text>
+  <line class="rule" x1="374" y1="208" x2="562" y2="208"/>
+
+  <text class="label hot-t" x="374" y="232" font-size="11">tracking</text>
+  <text class="sub"        x="374" y="249" font-size="11">→ await fast path</text>
+
+  <text class="label cold-t" x="374" y="275" font-size="11">not tracking</text>
+  <text class="sub"   x="374" y="292" font-size="11">→ ORB, no await</text>
+
+  <path class="flow" d="M468 306 L468 354" marker-end="url(#a)"/>
+
+  <!-- ── lane 3 ───────────────────────────────────────────── -->
+  <text class="sub" x="806" y="158" font-size="11" text-anchor="middle">WASM · OpenCV</text>
+
+  <!-- the hot path: runs on every frame while the target is held -->
+  <rect class="card hot" x="672" y="170" width="268" height="62" rx="7"/>
+  <text class="label hot-t" x="692" y="196" font-size="12">Lucas-Kanade · RANSAC</text>
+  <text class="sub"   x="692" y="214" font-size="11">every frame · 5-10 ms</text>
+
+  <!-- the cold path: only when there is nothing to track yet -->
+  <rect class="card cold" x="672" y="244" width="268" height="62" rx="7"/>
+  <text class="label cold-t" x="692" y="270" font-size="12">ORB + BEBLID · USAC_MAGSAC</text>
+  <text class="sub"   x="692" y="288" font-size="11">on target loss · 60-90 ms</text>
+
+  <path class="flow" d="M806 306 L806 354" marker-end="url(#a)"/>
+
+  <!-- Both calls go over Comlink; which one depends on whether the target
+       is currently held. The awaited one is the hot path. -->
+  <path class="flow-hot"  d="M580 201 L666 201" marker-end="url(#ah)"/>
+  <path class="flow-cold" d="M580 271 L666 271" marker-end="url(#ac)" stroke-dasharray="5 4"/>
+  <text class="sub" x="623" y="240" font-size="10" text-anchor="middle">Comlink</text>
+
+  <!-- ── shared memory band ───────────────────────────────── -->
+  <rect class="band" x="40" y="360" width="900" height="150" rx="8"/>
+  <text class="label" x="490" y="390" font-size="13" text-anchor="middle">SharedArrayBuffer · ring of frame slots</text>
+
+  <!-- What one slot is made of: three separate allocations, same buffer. -->
+  <text class="state" x="64" y="406" font-size="9" letter-spacing="0.8">EACH SLOT</text>
+  <g class="slotpart">
+    <rect x="64" y="416" width="132" height="18" rx="3"/>
+    <rect x="64" y="438" width="132" height="18" rx="3"/>
+    <rect x="64" y="460" width="132" height="18" rx="3"/>
+  </g>
+  <text class="state" x="72" y="429" font-size="9">Frame</text>
+  <text class="state" x="72" y="451" font-size="9">AtomicFlag</text>
+  <text class="state" x="72" y="473" font-size="9">Homography</text>
+
+  <text class="state" x="188" y="429" font-size="9" text-anchor="end">W×H</text>
+  <text class="state" x="188" y="451" font-size="9" text-anchor="end">4 B</text>
+  <text class="state" x="188" y="473" font-size="9" text-anchor="end">144 B</text>
+
+  <rect class="slot hot" x="240" y="408" width="128" height="46" rx="5"/>
+  <text class="label" x="304" y="430" font-size="12" text-anchor="middle">slot 0</text>
+  <text class="state" x="304" y="447" font-size="10" text-anchor="middle">IDLE</text>
+
+  <rect class="slot hot" x="382" y="408" width="128" height="46" rx="5"/>
+  <text class="label" x="446" y="430" font-size="12" text-anchor="middle">slot 1</text>
+  <text class="state" x="446" y="447" font-size="10" text-anchor="middle">READY</text>
+
+  <rect class="slot hot" x="524" y="408" width="128" height="46" rx="5"/>
+  <text class="label" x="588" y="430" font-size="12" text-anchor="middle">slot 2</text>
+  <text class="state" x="588" y="447" font-size="10" text-anchor="middle">COMPLETED</text>
+
+  <!-- detection gets its own buffer, so it never holds up a slot -->
+  <line class="rule" x1="680" y1="402" x2="680" y2="460"/>
+
+  <rect class="slot cold" x="718" y="408" width="150" height="46" rx="5"/>
+  <text class="label" x="793" y="430" font-size="12" text-anchor="middle">search buf</text>
+  <text class="state" x="793" y="447" font-size="10" text-anchor="middle">SEARCHING</text>
+
+  <!-- every slot cycles through these five states, written atomically -->
+  <text class="state" x="446" y="475" font-size="10" text-anchor="middle">IDLE → READY → PROCESSING → COMPLETED → DISPLAYED → IDLE</text>
+  <text class="sub hot-t" x="446" y="494" font-size="10" text-anchor="middle">zero-copy · Atomics.wait / notify</text>
+  <text class="sub cold-t" x="793" y="484" font-size="11" text-anchor="middle">detection · never holds a slot</text>
+
+  <!-- ── below the band: canvas ───────────────────────────── -->
+  <path class="flow" d="M146 510 L146 530" marker-end="url(#a)"/>
+
+  <rect class="card" x="40" y="536" width="212" height="104" rx="7"/>
+  <rect class="canvasimg" x="62" y="552" width="70" height="52" rx="3"/>
+  <path class="quad" stroke-width="2" d="M71 562 L124 558 L122 596 L73 593 z"/>
+  <text class="label" x="146" y="574" font-size="12">pose</text>
+  <text class="sub"   x="146" y="591" font-size="11">→ your render</text>
+  <!-- the frame is drawn either way; only the quad waits on a lock -->
+  <text class="sub" x="62" y="624" font-size="10">no target → frame still draws</text>
+
+  <!-- ── bottom strip ─────────────────────────────────────── -->
+  <line class="rule" x1="372" y1="560" x2="940" y2="560"/>
+  <text class="lane" x="372" y="590" font-size="11">EMSCRIPTEN PTHREADS → WEB WORKERS</text>
+
+  <g stroke-width="1.5">
+    <rect class="pool-on"  x="372" y="610" width="22" height="22" rx="3"/>
+    <rect class="pool-on"  x="402" y="610" width="22" height="22" rx="3"/>
+    <rect class="pool-off" x="432" y="610" width="22" height="22" rx="3"/>
+    <rect class="pool-off" x="462" y="610" width="22" height="22" rx="3"/>
+    <rect class="pool-off" x="492" y="610" width="22" height="22" rx="3"/>
+    <rect class="pool-off" x="522" y="610" width="22" height="22" rx="3"/>
+    <rect class="pool-off" x="552" y="610" width="22" height="22" rx="3"/>
+    <rect class="pool-off" x="582" y="610" width="22" height="22" rx="3"/>
+  </g>
+  <text class="sub" x="624" y="626" font-size="12">OpenCV uses 2 of 8</text>
+</svg>

@@ -1,0 +1,25 @@
+{
+  "name": "ORB_Fast",
+  "type": "ORB",
+  "debug": false,
+  "orb_params": {
+    "nFeatures": 1000,
+    "nDescriptorFeatures": 1500,
+    "scaleFactor": 1.2,
+    "nLevels": 6,
+    "edgeThreshold": 31,
+    "fastThreshold": 15
+  },
+  "optical_flow_params": {
+    "winSize": 11,
+    "maxLevel": 3,
+    "maxIterations": 20,
+    "epsilon": 0.02,
+    "minEigThreshold": 0.0002
+  },
+  "tracking_params": {
+    "maxConsecutiveFailures": 3,
+    "goodMatchRatio": 0.75,
+    "minMatchesForRecognition": 30
+  }
+}

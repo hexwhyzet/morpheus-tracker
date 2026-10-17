@@ -1,0 +1,12 @@
+# SharedArrayBuffer is only available on a cross-origin isolated page, and the
+# tracker needs it: OpenCV is built with -pthread, so the WASM memory is
+# shared, and frames are handed to the worker through a SharedArrayBuffer.
+#
+# require-corp additionally demands Cross-Origin-Resource-Policy on every
+# subresource — including the emscripten pthread worker — so it is set here too.
+#
+# Format understood by Cloudflare Pages and Netlify.
+/*
+  Cross-Origin-Opener-Policy: same-origin
+  Cross-Origin-Embedder-Policy: require-corp
+  Cross-Origin-Resource-Policy: same-origin

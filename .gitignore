@@ -1,0 +1,20 @@
+node_modules/
+core/build/
+CMakeUserPresets.json
+
+# gtest_discover_tests with WORKING_DIRECTORY writes this next to the sources
+# instead of into build/. It contains absolute paths from the build machine.
+cmake_test_discovery_*.json
+
+# js/src/wasm/ is built from core/ via `make wasm`, but the artefacts are
+# committed anyway: the demo host has no Emscripten toolchain, and it means
+# `npm run dev` works straight after a clone. Rebuild and commit them when
+# the C++ changes.
+
+dist/
+.DS_Store
+*.log
+
+# editors
+.idea/
+.vscode/

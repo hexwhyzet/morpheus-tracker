@@ -1,0 +1,20 @@
+[settings]
+os=Emscripten
+arch=wasm
+compiler=clang
+compiler.version=19
+compiler.libcxx=libc++
+compiler.cppstd=23
+
+[tool_requires]
+emsdk/3.1.50
+
+[conf]
+# -pthread is required: our own code in wasm/CMakeLists.txt is built with -pthread,
+# and OpenCV must use the same threading ABI. Otherwise parallel_for_ allocates TLS
+# buffers outside any managed pool, costing +4MB per frame.
+tools.build:cflags=["-msimd128", "-pthread"]
+tools.build:cxxflags=["-msimd128", "-pthread"]
+tools.build:sharedlinkflags=["-msimd128", "-pthread"]
+tools.build:exelinkflags=["-msimd128", "-pthread"]
+tools.cmake.cmaketoolchain:extra_variables={"CPU_BASELINE":"","CPU_DISPATCH":"","OPENCV_ENABLE_INTRINSICS":"OFF","CV_ENABLE_INTRINSICS":"OFF"}

@@ -1,0 +1,4 @@
+include(emscripten-base)
+
+[settings]
+build_type=Release

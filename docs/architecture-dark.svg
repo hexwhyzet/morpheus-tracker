@@ -1,0 +1,150 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 980 684" width="980" height="684" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace">
+  <defs>
+    <marker id="a" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M0 0 L8 4 L0 8 z" fill="#6f7484"/>
+    </marker>
+    <marker id="ah" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M0 0 L8 4 L0 8 z" fill="#3fbd79"/>
+    </marker>
+    <marker id="ac" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M0 0 L8 4 L0 8 z" fill="#e0a94a"/>
+    </marker>
+  </defs>
+
+  <rect width="980" height="684" fill="#16161a"/>
+
+  <!-- Sans for the title so it reads as a name, not as one more code label -->
+  <text x="40" y="46" font-size="27" fill="#f2f3f5" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Inter, Helvetica, Arial, sans-serif" font-weight="600" letter-spacing="-0.2px">Architecture</text>
+  <text x="40" y="68" font-size="13" fill="#9197a8">Image tracking off the main thread</text>
+  <line x1="40" y1="86" x2="940" y2="86" stroke="#26272e"/>
+
+  <!-- lane panels: the three execution contexts -->
+  <!-- The main thread column runs the full height: it writes the frame and
+       draws the result. The shared-memory band is painted over the columns,
+       crossing all three execution contexts. -->
+  <rect x="24"  y="100" width="256" height="560" rx="10" fill="#1a1b20" stroke="#26272e"/>
+  <rect x="340" y="100" width="256" height="436" rx="10" fill="#1a1b20" stroke="#26272e"/>
+  <rect x="656" y="100" width="300" height="436" rx="10" fill="#1a1b20" stroke="#26272e"/>
+
+  <!-- lane headers -->
+  <text x="40"  y="128" font-size="11" fill="#6f7484" letter-spacing="1.4px">MAIN THREAD</text>
+  <text x="356" y="128" font-size="11" fill="#6f7484" letter-spacing="1.4px">TRACKER.WORKER</text>
+  <text x="672" y="128" font-size="11" fill="#6f7484" letter-spacing="1.4px">WASM.WORKER</text>
+
+  <!-- ── lane 1 ───────────────────────────────────────────── -->
+  <rect x="40" y="152" width="212" height="52" rx="7" fill="#1e1f25" stroke="#3a3c46"/>
+  <text x="146" y="183" font-size="13" text-anchor="middle" fill="#e8e9ec">camera frame</text>
+
+  <path d="M146 204 L146 232" marker-end="url(#a)" stroke="#6f7484" fill="none"/>
+
+  <rect x="40" y="238" width="212" height="62" rx="7" fill="#1e1f25" stroke="#3a3c46"/>
+  <text x="146" y="264" font-size="13" text-anchor="middle" fill="#e8e9ec">GPU grayscale</text>
+  <text   x="146" y="284" font-size="11" text-anchor="middle" fill="#9197a8">WebGL</text>
+
+  <path d="M146 300 L146 354" marker-end="url(#a)" stroke="#6f7484" fill="none"/>
+
+  <!-- ── lane 2 ───────────────────────────────────────────── -->
+  <rect x="356" y="152" width="224" height="154" rx="7" fill="#1e1f25" stroke="#3a3c46"/>
+  <text x="468" y="176" font-size="13" text-anchor="middle" fill="#e8e9ec">coordinator</text>
+  <text   x="468" y="194" font-size="10" text-anchor="middle" fill="#9197a8">Atomics.wait — blocks, not on main</text>
+  <line x1="374" y1="208" x2="562" y2="208" stroke="#2e3038"/>
+
+  <text x="374" y="232" font-size="11" fill="#3fbd79">tracking</text>
+  <text        x="374" y="249" font-size="11" fill="#9197a8">→ await fast path</text>
+
+  <text x="374" y="275" font-size="11" fill="#e0a94a">not tracking</text>
+  <text   x="374" y="292" font-size="11" fill="#9197a8">→ ORB, no await</text>
+
+  <path d="M468 306 L468 354" marker-end="url(#a)" stroke="#6f7484" fill="none"/>
+
+  <!-- ── lane 3 ───────────────────────────────────────────── -->
+  <text x="806" y="158" font-size="11" text-anchor="middle" fill="#9197a8">WASM · OpenCV</text>
+
+  <!-- the hot path: runs on every frame while the target is held -->
+  <rect x="672" y="170" width="268" height="62" rx="7" fill="#1e1f25" stroke="#3fbd79"/>
+  <text x="692" y="196" font-size="12" fill="#3fbd79">Lucas-Kanade · RANSAC</text>
+  <text   x="692" y="214" font-size="11" fill="#9197a8">every frame · 5-10 ms</text>
+
+  <!-- the cold path: only when there is nothing to track yet -->
+  <rect x="672" y="244" width="268" height="62" rx="7" fill="#1e1f25" stroke="#e0a94a"/>
+  <text x="692" y="270" font-size="12" fill="#e0a94a">ORB + BEBLID · USAC_MAGSAC</text>
+  <text   x="692" y="288" font-size="11" fill="#9197a8">on target loss · 60-90 ms</text>
+
+  <path d="M806 306 L806 354" marker-end="url(#a)" stroke="#6f7484" fill="none"/>
+
+  <!-- Both calls go over Comlink; which one depends on whether the target
+       is currently held. The awaited one is the hot path. -->
+  <path  d="M580 201 L666 201" marker-end="url(#ah)" stroke="#3fbd79" fill="none"/>
+  <path d="M580 271 L666 271" marker-end="url(#ac)" stroke-dasharray="5 4" stroke="#e0a94a" fill="none"/>
+  <text x="623" y="240" font-size="10" text-anchor="middle" fill="#9197a8">Comlink</text>
+
+  <!-- ── shared memory band ───────────────────────────────── -->
+  <rect x="40" y="360" width="900" height="150" rx="8" fill="#202229" stroke="#41444f"/>
+  <text x="490" y="390" font-size="13" text-anchor="middle" fill="#e8e9ec">SharedArrayBuffer · ring of frame slots</text>
+
+  <!-- What one slot is made of: three separate allocations, same buffer. -->
+  <text x="64" y="406" font-size="9" letter-spacing="0.8" fill="#9197a8">EACH SLOT</text>
+  <g>
+    <rect x="64" y="416" width="132" height="18" rx="3" fill="#191a1f" stroke="#343742"/>
+    <rect x="64" y="438" width="132" height="18" rx="3" fill="#191a1f" stroke="#343742"/>
+    <rect x="64" y="460" width="132" height="18" rx="3" fill="#191a1f" stroke="#343742"/>
+  </g>
+  <text x="72" y="429" font-size="9" fill="#9197a8">Frame</text>
+  <text x="72" y="451" font-size="9" fill="#9197a8">AtomicFlag</text>
+  <text x="72" y="473" font-size="9" fill="#9197a8">Homography</text>
+
+  <text x="188" y="429" font-size="9" text-anchor="end" fill="#9197a8">W×H</text>
+  <text x="188" y="451" font-size="9" text-anchor="end" fill="#9197a8">4 B</text>
+  <text x="188" y="473" font-size="9" text-anchor="end" fill="#9197a8">144 B</text>
+
+  <rect x="240" y="408" width="128" height="46" rx="5" fill="#191a1f" stroke="#3fbd79"/>
+  <text x="304" y="430" font-size="12" text-anchor="middle" fill="#e8e9ec">slot 0</text>
+  <text x="304" y="447" font-size="10" text-anchor="middle" fill="#9197a8">IDLE</text>
+
+  <rect x="382" y="408" width="128" height="46" rx="5" fill="#191a1f" stroke="#3fbd79"/>
+  <text x="446" y="430" font-size="12" text-anchor="middle" fill="#e8e9ec">slot 1</text>
+  <text x="446" y="447" font-size="10" text-anchor="middle" fill="#9197a8">READY</text>
+
+  <rect x="524" y="408" width="128" height="46" rx="5" fill="#191a1f" stroke="#3fbd79"/>
+  <text x="588" y="430" font-size="12" text-anchor="middle" fill="#e8e9ec">slot 2</text>
+  <text x="588" y="447" font-size="10" text-anchor="middle" fill="#9197a8">COMPLETED</text>
+
+  <!-- detection gets its own buffer, so it never holds up a slot -->
+  <line x1="680" y1="402" x2="680" y2="460" stroke="#2e3038"/>
+
+  <rect x="718" y="408" width="150" height="46" rx="5" fill="#191a1f" stroke="#e0a94a"/>
+  <text x="793" y="430" font-size="12" text-anchor="middle" fill="#e8e9ec">search buf</text>
+  <text x="793" y="447" font-size="10" text-anchor="middle" fill="#9197a8">SEARCHING</text>
+
+  <!-- every slot cycles through these five states, written atomically -->
+  <text x="446" y="475" font-size="10" text-anchor="middle" fill="#9197a8">IDLE → READY → PROCESSING → COMPLETED → DISPLAYED → IDLE</text>
+  <text x="446" y="494" font-size="10" text-anchor="middle" fill="#3fbd79">zero-copy · Atomics.wait / notify</text>
+  <text x="793" y="484" font-size="11" text-anchor="middle" fill="#e0a94a">detection · never holds a slot</text>
+
+  <!-- ── below the band: canvas ───────────────────────────── -->
+  <path d="M146 510 L146 530" marker-end="url(#a)" stroke="#6f7484" fill="none"/>
+
+  <rect x="40" y="536" width="212" height="104" rx="7" fill="#1e1f25" stroke="#3a3c46"/>
+  <rect x="62" y="552" width="70" height="52" rx="3" fill="#2a2c33" stroke="#41444f"/>
+  <path stroke-width="2" d="M71 562 L124 558 L122 596 L73 593 z" stroke="#3fbd79" fill="none"/>
+  <text x="146" y="574" font-size="12" fill="#e8e9ec">pose</text>
+  <text   x="146" y="591" font-size="11" fill="#9197a8">→ your render</text>
+  <!-- the frame is drawn either way; only the quad waits on a lock -->
+  <text x="62" y="624" font-size="10" fill="#9197a8">no target → frame still draws</text>
+
+  <!-- ── bottom strip ─────────────────────────────────────── -->
+  <line x1="372" y1="560" x2="940" y2="560" stroke="#2e3038"/>
+  <text x="372" y="590" font-size="11" fill="#6f7484" letter-spacing="1.4px">EMSCRIPTEN PTHREADS → WEB WORKERS</text>
+
+  <g stroke-width="1.5">
+    <rect  x="372" y="610" width="22" height="22" rx="3" fill="#3fbd79" stroke="#3fbd79"/>
+    <rect  x="402" y="610" width="22" height="22" rx="3" fill="#3fbd79" stroke="#3fbd79"/>
+    <rect x="432" y="610" width="22" height="22" rx="3" fill="none" stroke="#41444f"/>
+    <rect x="462" y="610" width="22" height="22" rx="3" fill="none" stroke="#41444f"/>
+    <rect x="492" y="610" width="22" height="22" rx="3" fill="none" stroke="#41444f"/>
+    <rect x="522" y="610" width="22" height="22" rx="3" fill="none" stroke="#41444f"/>
+    <rect x="552" y="610" width="22" height="22" rx="3" fill="none" stroke="#41444f"/>
+    <rect x="582" y="610" width="22" height="22" rx="3" fill="none" stroke="#41444f"/>
+  </g>
+  <text x="624" y="626" font-size="12" fill="#9197a8">OpenCV uses 2 of 8</text>
+</svg>

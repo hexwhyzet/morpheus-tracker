@@ -1,0 +1,53 @@
+{
+  "name": "example_dataset",
+  "version": "1.0",
+  "description": "Example dataset for testing image trackers",
+  "fps": 30,
+  "tags": {
+    "difficulty": "medium",
+    "environment": "indoor"
+  },
+  "templates": [
+    {
+      "name": "t0",
+      "path": "templates/t0.png",
+      "metadata": {
+        "width": "640",
+        "height": "480"
+      }
+    },
+    {
+      "name": "t1",
+      "path": "templates/t1.png",
+      "metadata": {
+        "width": "640",
+        "height": "480",
+        "note": "Alternative template with different lighting"
+      }
+    }
+  ],
+  "sequences": [
+    {
+      "name": "seq_000",
+      "type": "tracking",
+      "template_index": 0,
+      "frames_dir": "sequences/seq_000/frames",
+      "gt_path": "sequences/seq_000/gt.json",
+      "metadata": {
+        "description": "Normal tracking sequence with gradual rotation",
+        "num_frames": "45"
+      }
+    },
+    {
+      "name": "seq_001",
+      "type": "redetect",
+      "template_index": 0,
+      "frames_dir": "sequences/seq_001/frames",
+      "gt_path": "sequences/seq_001/gt.json",
+      "metadata": {
+        "description": "Sequence with occlusions to test re-detection",
+        "num_frames": "60"
+      }
+    }
+  ]
+}

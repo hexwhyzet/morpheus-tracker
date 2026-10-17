@@ -1,0 +1,15 @@
+{
+  "name": "morpheus-tracker-root",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "workspaces": [
+    "js",
+    "demo"
+  ],
+  "scripts": {
+    "dev": "npm run dev --workspace @morpheus/tracker-demo",
+    "build": "npm run build --workspace @morpheus/tracker-demo",
+    "typecheck": "npm run typecheck --workspace @morpheus/tracker"
+  }
+}
